@@ -9,23 +9,24 @@ import {
   AppRegistry,
   StyleSheet,
   Text,
-  View
+  View,
+  Image,
 } from 'react-native';
+
+import AppText from './src/components/AppText';
+import Title from './src/components/Title';
+import SmallText from './src/components/SmallText';
+import Byline from './src/components/Byline';
+import Thumbnail from './src/components/Thumbnail';
+import NewsItem from './src/components/NewsItem';
+import NewsFeed from './src/components/NewsFeed';
 
 export default class RNNYT extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.android.js
-        </Text>
-        <Text style={styles.instructions}>
-          Double tap R on your keyboard to reload,{'\n'}
-          Shake or press menu button for dev menu
-        </Text>
+        <NewsFeed
+          />
       </View>
     );
   }
@@ -37,16 +38,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
   },
 });
 

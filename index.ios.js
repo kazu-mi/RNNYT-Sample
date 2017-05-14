@@ -18,16 +18,15 @@ import Title from './src/components/Title';
 import SmallText from './src/components/SmallText';
 import Byline from './src/components/Byline';
 import Thumbnail from './src/components/Thumbnail';
+import NewsItem from './src/components/NewsItem';
+import NewsFeed from './src/components/NewsFeed';
 
 export default class RNNYT extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Thumbnail 
-          url='https://blog-imgs-85.fc2.com/e/r/o/erog/151104_bprss_004.jpg' 
-          style={{width: 100}} 
-          accentColor='#998866'
-          titleText='SEX'/>
+        <NewsFeed
+          />
       </View>
     );
   }
