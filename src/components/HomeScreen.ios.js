@@ -5,7 +5,8 @@ import {
   Alert,
   StatusBar,
 } from 'react-native';
-import NewsFeed from './NewsFeed';
+import NewsFeedContainer from '../containers/NewsFeedContainer';
+import SearchContainer from '../containers/SearchContainer';
 import Search from './Search';
 import * as globalStyles from '../styles/global';
 
@@ -15,9 +16,12 @@ export default class HomeScreen extends Component {
     super(props);
     this.state = {
       tab: 'newsFeed',
+      newsCount: 0,
     };    
     
     StatusBar.setBarStyle('light-content');
+
+    this.updateBadge = this.updateBadge.bind(this);
   }
   
   showBookmarkAlert() {
@@ -29,6 +33,12 @@ export default class HomeScreen extends Component {
       ]
     );
   }
+
+  updateBadge(fetchedNewsList) {
+    this.setState({
+      newsCount: fetchedNewsList.length
+    });
+  }
   
   render() {
     return (
@@ -38,19 +48,19 @@ export default class HomeScreen extends Component {
         translucent={false}
         >
         <TabBarIOS.Item
-          badge={2}
+          badge={this.state.newsCount}
           systemIcon={'featured'}
           selected={this.state.tab === 'newsFeed'}
           onPress={() => this.setState({ tab: 'newsFeed' })}
           >
-          <NewsFeed />
+          <NewsFeedContainer onNewsFetched={this.updateBadge}/>
         </TabBarIOS.Item>
         <TabBarIOS.Item
           systemIcon={'search'}
           selected={this.state.tab === 'search'}
           onPress={() => this.setState({ tab: 'search' })}
           >
-          <Search />
+          <SearchContainer />
         </TabBarIOS.Item>
         <TabBarIOS.Item
           systemIcon={'bookmarks'}

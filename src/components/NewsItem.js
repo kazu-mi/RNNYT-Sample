@@ -4,6 +4,8 @@ import {
   TouchableOpacity,
   StyleSheet,
   ActionSheetIOS,
+  ViewPropTypes,
+  PlatformOSType,
 } from 'react-native';
 import Byline from './Byline';
 import AppText from './AppText';
@@ -20,11 +22,13 @@ export default class NewsItem extends Component {
   
   onLongPress() {
     // アクションシート表示
-    ActionSheetIOS.showActionSheetWithOptions({
-      options: ['Bookmark', 'Cancel'],
-      cancelButtonIndex: 1,
-      title: this.props.title,
-    }, buttonIndex => console.log('Button Selected', buttonIndex))
+    if (PlatformOSType === 'ios') {
+      ActionSheetIOS.showActionSheetWithOptions({
+        options: ['Bookmark', 'Cancel'],
+        cancelButtonIndex: 1,
+        title: this.props.title,
+      }, buttonIndex => console.log('Button Selected', buttonIndex))
+    }
   }
   
   render() {
@@ -69,11 +73,11 @@ export default class NewsItem extends Component {
 }
 
 NewsItem.propTypes = {
-  style: View.propTypes.style,
+  style: ViewPropTypes.style,
   imageUrl: PropTypes.string,
   title: PropTypes.string.isRequired,
   author: PropTypes.string.isRequired,
-  date: PropTypes.instanceOf(Date).isRequired,
+  date: PropTypes.string.isRequired,
   location: PropTypes.string,
   description: PropTypes.string,
   index: PropTypes.number.isRequired,

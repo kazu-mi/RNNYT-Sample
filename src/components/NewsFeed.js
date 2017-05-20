@@ -6,6 +6,9 @@ import {
   Modal,
   TouchableOpacity,
   WebView,
+  ViewPropTypes,
+  RefreshControl,
+  ActivityIndicator,
 } from 'react-native';
 import * as globalStyles from '../styles/global';
 import NewsItem from './NewsItem';
@@ -22,12 +25,39 @@ export default class NewsFeed extends Component {
     this.state = {
       dataSource: this.ds.cloneWithRows(props.news),
       modalVisible: false,
+      initialLoading: true,
+      refreshing: false,
     };
     
     this.renderModal = this.renderModal.bind(this);
     this.renderRow = this.renderRow.bind(this);
     this.onModalOpen = this.onModalOpen.bind(this);
     this.onModalClose = this.onModalClose.bind(this);
+
+    this.refresh = this.refresh.bind(this);
+  }
+
+  componentWillMount() {
+    this.refresh();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      dataSource: this.state.dataSource.cloneWithRows(nextProps.news),
+      initialLoading: false,
+    });
+  }
+
+  componentDidUpdate() {
+    if (this.props.onNewsFetched) {
+      this.props.onNewsFetched(this.props.news);
+    }
+  }
+
+  refresh() {
+    if (this.props.loadNews) {
+      this.props.loadNews();
+    }
   }
   
   renderModal() {
@@ -72,54 +102,61 @@ export default class NewsFeed extends Component {
       <NewsItem
         style={styles.newsItem}
         index={index}
-        onPress={() => this.onModalOpen(rowData.url)}
+        onPress={() => {this.onModalOpen(rowData.url)}
+        }
         {...rowData}
         />
     );
   }
   
   render() {
+    const {
+      listStyles = globalStyles.COMMON_STYLES.pageContainer,
+      showLoadingSpinner,
+    } = this.props;
+    const { initialLoading, refreshing, dataSource } = this.state;
+
     return (
-      <View style={globalStyles.COMMON_STYLES.pageContainer}>
-        <ListView
-          enableEmptySections
-          dataSource={this.state.dataSource}
-          renderRow={this.renderRow}
-          style={this.props.listStyles}
-          />
-        {this.renderModal()}
-      </View>
+      (initialLoading && showLoadingSpinner ?
+        <View style={[listStyles, styles.loadingContainer]}>
+          <ActivityIndicator
+            animating
+            size="small"
+            {...this.props}
+            />
+        </View>
+      :
+        <View style={globalStyles.COMMON_STYLES.pageContainer}>
+          <ListView
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={this.refresh}
+              />
+            }
+            enableEmptySections
+            dataSource={dataSource}
+            renderRow={this.renderRow}
+            style={listStyles}
+            />
+          {this.renderModal()}
+        </View>
+      )
     );
   }
 }
 
 NewsFeed.propTypes = {
   news: PropTypes.arrayOf(PropTypes.object),
-  listStyles: View.propTypes.style,
+  listStyles: ViewPropTypes.style,
+  loadNews: PropTypes.func,
+  onNewsFetched: PropTypes.func,
+  showLoadingSpinner: PropTypes.bool,
 }
 
 NewsFeed.defaultProps = {
-  news: [
-    {
-      title: 'React Native',
-      imageUrl: 'https://facebook.github.io/react/img/logo_og.png',
-      description: 'Build Native Mobile Apps using JavaScript and React',
-      date: new Date(),
-      author: 'Facebook',
-      location: 'Menlo Park, California',
-      url: 'https://facebook.github.io/react-native',
-    },
-    {
-      title: 'Packt Publishing',
-      imageUrl: 'https://www.packtpub.com/sites/default/files/packt_logo.png',
-      description: 'Stay Relevant',
-      date: new Date(),
-      author: 'Packt Publishing',
-      location: 'Birmingham, UK',
-      url: 'https://www.packtpub.com/',
-    },
-  ]
-}
+  showLoadingSpinner: true,
+};
 
 const styles = StyleSheet.create({
   newsItem: {
@@ -136,4 +173,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     flexDirection: 'row',
   },
+  container: {
+    flex: 1,
+  },
+  loadingContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  }
 });
