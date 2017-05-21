@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import NewsFeedContainer from '../containers/NewsFeedContainer';
 import SearchContainer from '../containers/SearchContainer';
-import Search from './Search';
+import BookmarkContainer from '../containers/BookmarkContainer';
 import * as globalStyles from '../styles/global';
 
 export default class HomeScreen extends Component {
@@ -17,7 +17,7 @@ export default class HomeScreen extends Component {
     this.state = {
       tab: 'newsFeed',
       newsCount: 0,
-    };    
+    };
     
     StatusBar.setBarStyle('light-content');
 
@@ -65,9 +65,9 @@ export default class HomeScreen extends Component {
         <TabBarIOS.Item
           systemIcon={'bookmarks'}
           selected={this.state.tab === 'bookmarks'}
-          onPress={() => this.showBookmarkAlert()}
+          onPress={() => this.setState({ tab: 'bookmarks' })}
           >
-          <Text>Bookmarks</Text>
+          <BookmarkContainer />
         </TabBarIOS.Item>
       </TabBarIOS>
     );

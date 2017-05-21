@@ -3,3 +3,6 @@ export const SEARCH_NEWS = 'SEARCH_NEWS';
 
 export const NAVIGATION_HOME = 'NAVIGATION_HOME';
 export const NAVIGATION_INTRO = 'NAVIGATION_INTRO';
+
+export const BOOKMARK = 'BOOKMARK';
+export const LOAD_BOOKMARKS = 'LOAD_BOOKMARKS';

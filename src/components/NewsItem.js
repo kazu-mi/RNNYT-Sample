@@ -5,7 +5,7 @@ import {
   StyleSheet,
   ActionSheetIOS,
   ViewPropTypes,
-  PlatformOSType,
+  Platform,
 } from 'react-native';
 import Byline from './Byline';
 import AppText from './AppText';
@@ -22,12 +22,16 @@ export default class NewsItem extends Component {
   
   onLongPress() {
     // アクションシート表示
-    if (PlatformOSType === 'ios') {
+    if (Platform.OS === 'ios') {
       ActionSheetIOS.showActionSheetWithOptions({
         options: ['Bookmark', 'Cancel'],
         cancelButtonIndex: 1,
         title: this.props.title,
-      }, buttonIndex => console.log('Button Selected', buttonIndex))
+      }, buttonIndex => {
+        if (buttonIndex === 0) {
+          this.props.onBookmark();
+        }
+      })
     }
   }
   
@@ -82,6 +86,7 @@ NewsItem.propTypes = {
   description: PropTypes.string,
   index: PropTypes.number.isRequired,
   onPress: PropTypes.func.isRequired,
+  onBookmark: PropTypes.func.isRequired,
 };
 
 const styles = StyleSheet.create({

@@ -9,12 +9,12 @@ import Title from './Title';
 import AppText from './AppText';
 import * as globalStyles from '../styles/global';
 
-StatusBar.setBarStyle('light-content');
-
 export default class IntroScreen extends Component {
 
   constructor(props) {
     super(props);
+
+    StatusBar.setBarStyle('light-content');
   }
 
   render() {

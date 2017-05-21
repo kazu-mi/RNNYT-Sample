@@ -36,3 +36,9 @@ export const filterNewsBySearchTerm = (newsItems, searchTerm) => {
     title.toLowerCase().indexOf(searchTerm) > -1
   ));
 }
+
+export const filterBookmark = (newsItems, bookmark) => {
+  return newsItems.filter(( {url} ) => (
+    url === bookmark
+  ));
+}
